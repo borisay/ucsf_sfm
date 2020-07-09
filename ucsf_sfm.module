@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains kipac_dev.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ucsf_sfm_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.ucsf_sfm':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Something what needs for project') . '</p>';
+      return $output;
+    default:
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ * @param $node
+ */
+function ucsf_sfm_node_presave(Drupal\node\NodeInterface $node) {
+  $type=$node->get('type')->target_id;
+  if($type == 'company') {
+    $nid=$node->get('nid')->value;
+//    dpm($nid);
+//    $start_date = $node->field_stanford_event_datetime->start_date;
+//    $date = \Drupal::service('date.formatter')->format(
+//      $start_date->getTimestamp(), 'custom', 'Y-m-d\TH:i:s'
+//    );
+//    $node->field_date_temp->value = $date;
+  }
+}
+

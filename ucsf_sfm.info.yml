@@ -1,0 +1,5 @@
+name: UCSF SFM
+type: module
+description: Some hooks for contribute modules
+core: 8.x
+package: Custom

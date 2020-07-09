@@ -1,0 +1,5 @@
+{
+    "name": "borisay/ucsf_sfm",
+    "description": "Custom dev module for UCSF smokefreemedia",
+    "type": "drupal-custom-module"
+}

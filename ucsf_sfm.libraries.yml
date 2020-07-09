@@ -1,0 +1,9 @@
+address-update:
+  version: 1.x
+  css:
+    state:
+      css/basic.css: {}
+  js:
+    js/basic.js: {}
+  dependencies:
+    - core/jquery
