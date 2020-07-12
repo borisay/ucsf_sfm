@@ -25,16 +25,77 @@ function ucsf_sfm_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_node_presave().
  * @param $node
  */
+
 function ucsf_sfm_node_presave(Drupal\node\NodeInterface $node) {
   $type=$node->get('type')->target_id;
-  if($type == 'company') {
-    $nid=$node->get('nid')->value;
-//    dpm($nid);
-//    $start_date = $node->field_stanford_event_datetime->start_date;
-//    $date = \Drupal::service('date.formatter')->format(
-//      $start_date->getTimestamp(), 'custom', 'Y-m-d\TH:i:s'
-//    );
-//    $node->field_date_temp->value = $date;
+  switch ($type){
+    case 'movie':
+
+      $total_inc = intval($node->get("field_cigarettes")->value) + intval($node->get("field_cigars")->value) + intval($node->get("field_pipes")->value) + intval($node->get("field_e_cigarettes")->value) + intval($node->get("field_smokeless")->value);
+      $node->set('field_total_tobacco_incidents',$total_inc);
+
+      //  calculate field_incident_bracket
+      switch (true){
+        case ($total_inc >= 0 && $total_inc <= 10):
+          $node -> set('field_incident_bracket', '192');
+          break;
+        case (29 >= $total_inc && $total_inc >= 10):
+          $node -> set('field_incident_bracket', '193');
+          break;
+        case (49 >= $total_inc && $total_inc >= 30):
+          $node -> set('field_incident_bracket', '194');
+          break;
+        case (99 >= $total_inc && $total_inc >= 50):
+          $node -> set('field_incident_bracket', '195');
+          break;
+        case ($total_inc >= 100):
+          $node -> set('field_incident_bracket', '196');
+          break;
+      }
+
+      //  calculate field_views
+      $node_price_id = $node->get("field_ticket_price")->target_id;
+      $node_price = Node::load($node_price_id);
+      $price = $node_price -> get('field_ticket_price_number') -> value;
+      $views = ($node -> get('field_box_office_total') -> value)/$price;
+      $node->set('field_views',$views);
+
+      //  calculate field_tobacco_impressions
+      $field_tobacco_impressions = $total_inc * $views;
+      $node->set('field_tobacco_impressions',$field_tobacco_impressions);
+
+      //  calculate actor using tobacco
+      $para_actors = $node->get("field_actor")->getValue();
+      $field_lead = 0;
+      $field_extra = 0;
+      $field_credited_non_star = 0;
+      foreach ( $para_actors as $para_actor ) {
+        $para_id = $para_actor['target_id'];
+        $para = Paragraph::load($para_id);
+        if($para->get('field_star_power')->target_id) {
+          switch ($para->get('field_star_power')->target_id) {
+            case 124;
+              $field_lead++;
+              break;
+            case 141;
+              $field_extra++;
+              break;
+            case 125;
+              $field_credited_non_star++;
+              break;
+          }
+        }
+      }
+      $node -> set('field_lead', $field_lead);
+      $node -> set('field_extra', $field_extra);
+      $node -> set('field_credited_non_star', $field_credited_non_star);
+
+      break;
+    case'person':
+      //
+      break;
+    default:
+      //      code to be executed if n is different from all case's value;
   }
 }
 
