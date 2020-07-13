@@ -2,10 +2,12 @@
 
 /**
  * @file
- * Contains kipac_dev.module..
+ * Contains ucsf_sfm.module
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\node\Entity\Node;
+use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Implements hook_help().
@@ -98,4 +100,3 @@ function ucsf_sfm_node_presave(Drupal\node\NodeInterface $node) {
       //      code to be executed if n is different from all case's value;
   }
 }
-
