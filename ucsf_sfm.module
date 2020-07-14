@@ -57,10 +57,15 @@ function ucsf_sfm_node_presave(Drupal\node\NodeInterface $node) {
 
       //  calculate field_views
       $node_price_id = $node->get("field_ticket_price")->target_id;
-      $node_price = Node::load($node_price_id);
-      $price = $node_price -> get('field_ticket_price_number') -> value;
-      $views = ($node -> get('field_box_office_total') -> value)/$price;
-      $node->set('field_views',$views);
+      if(!empty($node_price_id)){
+        $node_price = Node::load($node_price_id);
+        $price = $node_price -> get('field_ticket_price_number') -> value;
+        $views = ($node -> get('field_box_office_total') -> value)/$price;
+        $node->set('field_views',$views);
+      } else {
+        $views = 0;
+      }
+
 
       //  calculate field_tobacco_impressions
       $field_tobacco_impressions = $total_inc * $views;
